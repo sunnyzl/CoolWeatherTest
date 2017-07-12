@@ -2,9 +2,11 @@ package com.example.zhaoliang.coolweathertest.util;
 
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.example.zhaoliang.coolweathertest.db.City;
 import com.example.zhaoliang.coolweathertest.db.County;
 import com.example.zhaoliang.coolweathertest.db.Province;
+import com.example.zhaoliang.coolweathertest.model.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,5 +94,22 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    /**
+     * 将返回的JSON数据解析成Weather实体类
+     * @param response
+     * @return
+     */
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return JSON.parseObject(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
